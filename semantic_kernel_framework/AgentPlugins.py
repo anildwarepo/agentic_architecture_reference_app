@@ -17,7 +17,7 @@ sample_data_path = os.path.abspath(sample_data_path)  # resolve full path
 class AccountPlugins:
 
     @kernel_function
-    def get_account_info(self, account_id: Annotated[str, "Customer’s 10-digit account ID or account number"]) -> str:
+    def get_account_info(self, account_id: Annotated[str, "Customer’s 10-digit alphanumeric account ID or account number"]) -> str:
         """Get account information for the given account ID."""
         try:
             account_data_file = os.path.join(sample_data_path, f"{account_id}.json")
@@ -28,7 +28,7 @@ class AccountPlugins:
             return "Account not found."
 
     @kernel_function
-    def get_transaction_details(self, account_id: Annotated[str, "Customer’s 10-digit account ID or account number"]) -> str:
+    def get_transaction_details(self, account_id: Annotated[str, "Customer’s 10-digit alphanumeric account ID or account number"]) -> str:
         """Get transaction details for the given account ID."""
         try:
             txn_data_file = os.path.join(sample_data_path, f"Txn_{account_id}.json")
