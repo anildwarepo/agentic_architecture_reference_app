@@ -8,7 +8,7 @@ from azure.search.documents.indexes import SearchIndexClient
 from azure.search.documents.indexes.models import SearchFieldDataType
 from azure.search.documents.models import VectorizableTextQuery
 from dotenv import load_dotenv
-from user_defined_types import *
+from semantic_kernel_framework.user_defined_types import *
 
 load_dotenv()
 

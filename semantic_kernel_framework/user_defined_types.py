@@ -1,12 +1,9 @@
-import json
-from enum import Enum
-from typing import Optional
-
 from pydantic import BaseModel, ConfigDict
-
-from semantic_kernel.contents import ChatHistory
+from typing import Optional
+from enum import Enum
 from semantic_kernel.kernel_pydantic import KernelBaseModel
-
+from semantic_kernel.contents import ChatHistory
+import json
 
 class SearchResult(BaseModel):
     id: Optional[str]
@@ -25,8 +22,11 @@ class PaypalSearchResult(BaseModel):
     fileName: Optional[str]
     content: Optional[str]
   
-
 class PaypalResult(BaseModel):
+    search_results: list[PaypalSearchResult] = []
+    user_query: str = ""
+    
+class RagStepInput(BaseModel):
     search_results: list[PaypalSearchResult] = []
     user_query: str = ""
 

@@ -1,6 +1,7 @@
 import asyncio
+from typing import Any, AsyncGenerator
 
-from AgentPlugins import AccountPlugins, SearchPlugins
+from semantic_kernel_framework.AgentPlugins import AccountPlugins, SearchPlugins
 from azure.identity.aio import (AzureDeveloperCliCredential,
                                 DefaultAzureCredential,
                                 get_bearer_token_provider)
@@ -16,6 +17,10 @@ from semantic_kernel.contents import (ChatMessageContent, FunctionCallContent,
 from semantic_kernel.filters import FunctionInvocationContext
 from semantic_kernel.prompt_template.prompt_template_config import \
     PromptTemplateConfig
+
+from semantic_kernel_framework.observability_helper import set_up_observability
+
+set_up_observability()
 
 aoai_credential =  AzureDeveloperCliCredential() # login with azd login # DefaultAzureCredential()
 token_provider = get_bearer_token_provider(aoai_credential, "https://cognitiveservices.azure.com/.default")
@@ -78,13 +83,6 @@ prompt_template_config = PromptTemplateConfig(
                                                         tool_choice="auto",
                                                         function_choice_behavior=FunctionChoiceBehavior.Auto())  # <-- let the model pick tools,
 )
-
-auto_call_settings = AzureChatPromptExecutionSettings(
-        service_id=RAG_AGENT_SERVICE_ID,      # or whichever service the agent uses
-        max_tokens=4000,
-        temperature=0.2,
-        tool_choice="auto")                   # <-- let the model pick tools
-auto_call_settings.function_choice_behavior = FunctionChoiceBehavior.Auto(auto_invoke=True)
 
 get_account_info_agent = ChatCompletionAgent(
     name="get_account_info_agent",
@@ -188,8 +186,6 @@ triage_agent = ChatCompletionAgent(
     plugins=[query_validator_agent, rag_agent, get_account_info_agent, get_transaction_info_agent],
 )
 
-thread: ChatHistoryAgentThread = ChatHistoryAgentThread()
-
 async def handle_streaming_intermediate_steps(message: ChatMessageContent) -> None:
     for item in message.items or []:
         if isinstance(item, FunctionCallContent):
@@ -199,50 +195,18 @@ async def handle_streaming_intermediate_steps(message: ChatMessageContent) -> No
         else:
             print(f"{message.role}: {message.content}")
 
-async def chat() -> bool:
-    """
-    Continuously prompt the user for input and show the assistant's response.
-    Type 'exit' to exit.
-    """
-    try:
-        user_input = input("User:> ")
-    except (KeyboardInterrupt, EOFError):
-        print("\n\nExiting chat...")
-        return False
-
-    if user_input.lower().strip() == "exit":
-        print("\n\nExiting chat...")
-        return False
+class MultiAgent:
+    def __init__(self):
+        self.thread = ChatHistoryAgentThread()
 
 
-    
-    response = triage_agent.invoke_stream(messages=user_input, 
-                                          thread=thread,
+    async def start_multi_agent_chat_stream(self, user_input: str) -> AsyncGenerator[str, Any]:
+        try:
+            stream_response = triage_agent.invoke_stream(messages=user_input, 
+                                          thread=self.thread,
                                           on_intermediate_message=handle_streaming_intermediate_steps)
+            return stream_response
 
-    async for chunk in response:                      # each chunk is StreamingChatMessageContent
-        print(chunk.content, end='', flush=True)      # <- no newline
+        except Exception as e:
+            print("Error in multi agent chat: ", e)
 
-    print()  # add a final newline when the stream finishes
-
-
-
-
-    #if response:
-    #    print(f"Agent :> {response}")
-
-    return True
-
-
-
-
-
-async def main() -> None:
-    print("Welcome to the chat bot!\n  Type 'exit' to exit.\n .")
-    chatting = True
-    while chatting:
-        chatting = await chat()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

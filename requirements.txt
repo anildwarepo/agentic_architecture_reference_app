@@ -1,2 +1,8 @@
 semantic-kernel
-azure-search-documents>=11.6.0b4
+ipykernel
+azure-monitor-opentelemetry-exporter
+semantic-kernel[azure]
+fastapi
+uvicorn
+requests 
+beautifulsoup4
