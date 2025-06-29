@@ -5,4 +5,4 @@ semantic-kernel[azure]
 fastapi
 uvicorn
 requests 
-beautifulsoup4
+

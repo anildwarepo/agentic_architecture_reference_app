@@ -57,7 +57,7 @@ A reference implementation of a multi-agent chat system built with **[Microsoft 
 
 | Azure service | Minimum role required |Notes|
 |---------------|-----------------------|-----|
-| Azure AI Search | **Search Index Data Reader** | The index needs to be populated with vector embedding and search content |
+| Azure AI Search | **Search Service Contributor**, **Search Index Data Contributor** | The index needs to be created and populated with vector embedding and search content |
 | Azure AI Foundry | **Azure AI User** | Azure AI Foundry Resource needs to be created |
 | Azure OpenAI | **Cognitive Services OpenAI User** | Azure OpenAI latest model deployed|
 
