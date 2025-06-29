@@ -4,6 +4,7 @@ from typing import Any, AsyncGenerator
 from semantic_kernel_framework.AgentPlugins import AccountPlugins, SearchPlugins
 from azure.identity.aio import (AzureDeveloperCliCredential,
                                 DefaultAzureCredential,
+                                AzureCliCredential,
                                 get_bearer_token_provider)
 from semantic_kernel import Kernel
 from semantic_kernel.agents import ChatCompletionAgent, ChatHistoryAgentThread
@@ -22,7 +23,7 @@ from semantic_kernel_framework.observability_helper import set_up_observability
 
 set_up_observability()
 
-aoai_credential =  AzureDeveloperCliCredential() # login with azd login # DefaultAzureCredential()
+aoai_credential =  AzureCliCredential() # login with azd login # DefaultAzureCredential()
 token_provider = get_bearer_token_provider(aoai_credential, "https://cognitiveservices.azure.com/.default")
 
 """

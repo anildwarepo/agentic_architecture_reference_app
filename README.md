@@ -104,38 +104,62 @@ A reference implementation of a multi-agent chat system built with **[Microsoft 
 
 3. Local setup
 
-#### Local setup (Linux / macOS)
-```bash
-# 1) Clone repository
-git clone https://github.com/<org>/<repo>.git
-cd <repo>
+    #### Local setup (Linux / macOS)
+    ```bash
+    # 1) Clone repository
+    git clone https://github.com/<org>/<repo>.git
+    cd <repo>
 
-# 2) Create & activate virtual environment
-python -m venv .venv
-source .venv/bin/activate
+    # 2) Create & activate virtual environment
+    python -m venv .venv
+    source .venv/bin/activate
 
-# 3) Install dependencies
-pip install -r requirements.txt
-```
+    # 3) Install dependencies
+    pip install -r requirements.txt
+    ```
 
-#### Local setup Windows
+    #### Local setup Windows
 
-```powershell
-:: 1) Clone
-git clone https://github.com/<org>/<repo>.git
-cd <repo>
+    ```powershell
+    :: 1) Clone
+    git clone https://github.com/<org>/<repo>.git
+    cd <repo>
 
-:: 2) Create virtual environment
-python -m venv .venv
+    :: 2) Create virtual environment
+    python -m venv .venv
 
-:: 3) Activate (PowerShell)
-.\.venv\Scripts\Activate.ps1
-:: or CMD
-:: .\.venv\Scripts\activate.bat
+    :: 3) Activate (PowerShell)
+    .\.venv\Scripts\Activate.ps1
+    :: or CMD
+    :: .\.venv\Scripts\activate.bat
 
-:: 4) Install dependencies
-pip install -r requirements.txt
-```
+    :: 4) Install dependencies
+    pip install -r requirements.txt
+    ```
+
+5. Az login
+
+   Make sure you are logged in to Azure CLI with the correct account that has access to the resources:
+
+   ```bash
+   az login
+    ```
+
+    >Note: If you are using a service principal, configure Service Principal authentication by setting the following environment variables. Then change authentication method in `paypal_agent_implementation.py` to `AzureCliCredential` or `DefaultAzureCredential`.
+    
+    ```bash
+    export AZURE_CLIENT_ID=<your-client-id>
+    export AZURE_TENANT_ID=<your-tenant-id>
+    export AZURE_CLIENT_SECRET=<your-client-secret>
+   ```
+
+    ```powershell
+    $env:AZURE_CLIENT_ID="<your-client-id>"
+    $env:AZURE_TENANT_ID="<your-tenant-id>"
+    $env:AZURE_CLIENT_SECRET="<your-client-secret>"
+    ```
+
+
 
 4. Running the API server
 
@@ -154,6 +178,7 @@ pip install -r requirements.txt
 
 6. Multi-agent chat session
 
+    WSL
     ```bash
     session_id=$(uuidgen)
 
@@ -192,6 +217,48 @@ pip install -r requirements.txt
     -d '{"user_message":"Was ist meine letzte Transaktion?","conversation_id":"'"$session_id"'"}' \
     -w '\n-- elapsed: %{time_total}s --\n' \
     http://172.27.0.1:8000/multi_agent_chat/
+    ```
+    
+    Linux / macOS
+
+    ```bash
+    session_id=$(uuidgen)
+
+    # Start a new session
+    curl -sS -N \
+    -H "Content-Type: application/json" \
+    -d '{"user_message":"I want to know my credit card balance.","conversation_id":"'"$session_id"'"}' \
+    -w '\n-- elapsed: %{time_total}s --\n' \
+    http://localhost:8000/multi_agent_chat/
+
+    # Follow-up messages in the same session
+    curl -sS -N \
+    -H "Content-Type: application/json" \
+    -d '{"user_message":"account number is A1234567890.","conversation_id":"'"$session_id"'"}' \
+    -w '\n-- elapsed: %{time_total}s --\n' \
+    http://localhost:8000/multi_agent_chat/
+
+    # Continue the conversation with RAG agent
+    curl -sS -N \
+    -H "Content-Type: application/json" \
+    -d '{"user_message":"how to open dispute PayPal Account?","conversation_id":"'"$session_id"'"}' \
+    -w '\n-- elapsed: %{time_total}s --\n' \
+    http://localhost:8000/multi_agent_chat/
+
+
+    # Different follow-up messages in the same session
+    curl -sS -N \
+    -H "Content-Type: application/json" \
+    -d '{"user_message":"last transaction","conversation_id":"'"$session_id"'"}' \
+    -w '\n-- elapsed: %{time_total}s --\n' \
+    http://localhost:8000/multi_agent_chat/
+
+    # Unsupported language test
+    curl -sS -N \
+    -H "Content-Type: application/json" \
+    -d '{"user_message":"Was ist meine letzte Transaktion?","conversation_id":"'"$session_id"'"}' \
+    -w '\n-- elapsed: %{time_total}s --\n' \
+    http://localhost:8000/multi_agent_chat/
 
 
     ```

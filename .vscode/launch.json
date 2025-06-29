@@ -14,24 +14,22 @@
             "purpose": ["debug-in-terminal"]
         },
         {
-            "name": "Python FastAPI app with Dapr",
-            "type": "python",
+            "name": "FastAPI (uvicorn)",
+            "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/samples/demos/process_with_dapr/fastapi_app.py",
+            "module": "uvicorn",
+            "args": [
+                "fast_api:app",           // import-path:variable
+                "--reload",               // auto-reload on file changes
+                "--host", "0.0.0.0",
+                "--port", "8000"
+            ],
+
             "console": "integratedTerminal",
-            "preLaunchTask": "daprd-debug-python",
-            "postDebugTask": "daprd-down-python",
-            "justMyCode": false
-        },
-        {
-            "name": "Python Flask API app with Dapr",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/samples/demos/process_with_dapr/flask_app.py",
-            "console": "integratedTerminal",
-            "preLaunchTask": "daprd-debug-python",
-            "postDebugTask": "daprd-down-python",
-            "justMyCode": false
+            "subProcess": true,
+            "justMyCode": false,
         }
+        
+
     ]
 }

@@ -58,7 +58,7 @@ async def retrieve_search_results(search_query: str, top_k: int = 10) -> List[Pa
 if __name__ == "__main__":
     import asyncio
     
-    search_query = "how to configure netbackup?"
+    search_query = "how to open dispute?"
     top_k = 5
     results = asyncio.run(retrieve_search_results(search_query, top_k))
     print(results)
