@@ -2,15 +2,16 @@
 
 A reference implementation of a multi-agent chat system built with **[Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel)**, FastAPI, and Azure AI services.
 
-| Capability | Status |
-|------------|--------|
-| Agent-to-agent architecture | ✔️ Implemented |
-| Entra ID (MSAL) authentication | ✔️ Implemented |
-| Streaming responses | ✔️ Implemented |
-| Stored completions  | ⚠️ Implemented but currently disabled (under investigation) |
-| Chat history persistence | ✔️ Implemented |
-| Observability hooks (OpenTelemetry) | ✔️ Implemented |
-| End-to-end latency metrics | ✔️ Implemented |
+| Capability | Status | Notes |
+|------------|--------|-------|
+| Agent-to-agent architecture | ✔️ Implemented | |
+| Entra ID (MSAL) authentication | ✔️ Implemented | |
+| Streaming responses | ✔️ Implemented | |
+| Stored completions  | ⚠️ Implemented but currently disabled (under investigation) | |
+| Vector Search | ✔️ Implemented | With both Azure Cosmos DB and Azure AI Search |
+| Chat history persistence | ✔️ Implemented | |
+| Observability hooks (OpenTelemetry) | ✔️ Implemented | |
+| End-to-end latency metrics | ✔️ Implemented | |
 
 ---
 
