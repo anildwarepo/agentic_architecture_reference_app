@@ -7,6 +7,8 @@ A reference implementation of a multi-agent chat system built with **[Microsoft 
 | Agent-to-agent architecture | ✔️ Implemented |
 | Entra ID (MSAL) authentication | ✔️ Implemented |
 | Streaming responses | ✔️ Implemented |
+| MCP Server Plugin | ✔️ Implemented |
+| MCP Client Agent  | ✔️ Implemented |
 | Stored completions  | ⚠️ Implemented but currently disabled (under investigation) |
 | Chat history persistence | ✔️ Implemented |
 | Observability hooks (OpenTelemetry) | ✔️ Implemented |

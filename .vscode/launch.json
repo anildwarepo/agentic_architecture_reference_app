@@ -28,8 +28,23 @@
             "console": "integratedTerminal",
             "subProcess": true,
             "justMyCode": false,
+        },
+        {
+            "name": "mcp server",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "semantic_kernel_framework.mcp_server",
+            "args": [
+                "--transport", "stdio",
+                "--port", "8000"
+            ],
+
+            "console": "integratedTerminal",
+            "subProcess": true,
+            "justMyCode": false,
         }
         
+
 
     ]
 }
